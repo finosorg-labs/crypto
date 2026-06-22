@@ -9,6 +9,8 @@ build/**
 build-*/
 install/
 
+crypto-c/**
+
 # Go
 *.test
 *.out

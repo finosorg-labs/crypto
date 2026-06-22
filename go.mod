@@ -1,3 +1,3 @@
-module github.com/finos-org-labs/crypto
+module github.com/finosorg-labs/crypto
 
 go 1.26.1
