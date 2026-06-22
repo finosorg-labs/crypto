@@ -126,6 +126,8 @@ target_include_directories(finkit_crypto
     PUBLIC
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/platform/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/ds/include>
+        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/modules/sort/include>
         $<INSTALL_INTERFACE:include>
 )
 
@@ -133,11 +135,11 @@ target_compile_definitions(finkit_crypto PRIVATE FC_STATIC_BUILD)
 
 # Set compile flags for SIMD variants based on detected level
 if(FC_SIMD_LEVEL STREQUAL "AVX512")
-    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
+    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
-    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
+    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
-    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
+    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
 endif()
 
 # Create base static library (without platform)
@@ -165,6 +167,7 @@ endif()
 set(MERGED_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR}/build/${OPTIM_BUILD_DIR}/libfinkit_crypto_static.a)
 set(PLATFORM_LIB_PATH "${PLATFORM_BUILD_DIR}/libfinkit_platform_static.a")
 set(DS_LIB_PATH "${DS_BUILD_DIR}/libfinkit_ds_static.a")
+set(SORT_LIB_PATH "${SORT_BUILD_DIR}/libfinkit_sort_static.a")
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     # Windows: use lib.exe to merge libraries
@@ -173,9 +176,10 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${OPTIM_BUILD_DIR}
         COMMAND lib.exe /OUT:${MERGED_LIB_PATH}
             $<TARGET_FILE:finkit_crypto_static_base>
+            ${SORT_LIB_PATH}
             ${DS_LIB_PATH}
          ${PLATFORM_LIB_PATH}
-        DEPENDS finkit_crypto_static_base ${DS_LIB_PATH} ${PLATFORM_LIB_PATH}
+        DEPENDS finkit_crypto_static_base ${SORT_LIB_PATH} ${DS_LIB_PATH} ${PLATFORM_LIB_PATH}
         COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
         VERBATIM
     )
@@ -186,10 +190,11 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
       COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${OPTIM_BUILD_DIR}
       COMMAND libtool -static -o ${MERGED_LIB_PATH}
             $<TARGET_FILE:finkit_crypto_static_base>
+            ${SORT_LIB_PATH}
             ${DS_LIB_PATH}
             ${PLATFORM_LIB_PATH}
             2>&1 | grep -v "warning duplicate member name" || true
-        DEPENDS finkit_crypto_static_base ${DS_LIB_PATH} ${PLATFORM_LIB_PATH}
+        DEPENDS finkit_crypto_static_base ${SORT_LIB_PATH} ${DS_LIB_PATH} ${PLATFORM_LIB_PATH}
         COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
         VERBATIM
     )
@@ -199,6 +204,7 @@ else()
     file(GENERATE OUTPUT ${MRI_SCRIPT} CONTENT
 "CREATE ${MERGED_LIB_PATH}
 ADDLIB $<TARGET_FILE:finkit_crypto_static_base>
+ADDLIB ${SORT_LIB_PATH}
 ADDLIB ${DS_LIB_PATH}
 ADDLIB ${PLATFORM_LIB_PATH}
 SAVE
@@ -209,7 +215,7 @@ END
       OUTPUT ${MERGED_LIB_PATH}
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_SOURCE_DIR}/build/${OPTIM_BUILD_DIR}
         COMMAND ${CMAKE_AR} -M < ${MRI_SCRIPT}
-      DEPENDS finkit_crypto_static_base ${DS_LIB_PATH} ${PLATFORM_LIB_PATH} ${MRI_SCRIPT}
+      DEPENDS finkit_crypto_static_base ${SORT_LIB_PATH} ${DS_LIB_PATH} ${PLATFORM_LIB_PATH} ${MRI_SCRIPT}
         COMMENT "Merging static libraries into ${MERGED_LIB_PATH}"
       VERBATIM
     )

@@ -12,6 +12,8 @@ target_include_directories(bench_framework
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/modules/platform/include
+        ${CMAKE_SOURCE_DIR}/modules/ds/include
+        ${CMAKE_SOURCE_DIR}/modules/sort/include
 )
 
 target_link_libraries(bench_framework
@@ -33,6 +35,7 @@ target_link_libraries(crypto_benchmarks
     PRIVATE
         bench_framework
         finkit_crypto_static_base
+        finkit::sort
         finkit::platform
         finkit::ds
         m
@@ -47,6 +50,8 @@ target_include_directories(crypto_benchmarks
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
         ${CMAKE_SOURCE_DIR}/modules/platform/include
+        ${CMAKE_SOURCE_DIR}/modules/ds/include
+        ${CMAKE_SOURCE_DIR}/modules/sort/include
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
