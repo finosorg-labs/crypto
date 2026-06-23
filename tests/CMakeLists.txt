@@ -7,7 +7,7 @@ add_executable(crypto_tests
     test_framework.c
     test_main.c
     test_crypto.c
-    test_weighted_median.c
+    test_xxx.c
 )
 
 # Link with crypto library

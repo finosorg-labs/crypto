@@ -9,10 +9,10 @@
 #include "test_framework.h"
 
 /* External test registration functions from sub-modules */
-extern void register_weighted_median_tests(void);
+extern void register_xxx_tests(void);
 
 /* Entry point for crypto tests */
 void register_crypto_tests(void) {
     /* Register all sub-module tests */
-    register_weighted_median_tests();
+    register_xxx_tests();
 }

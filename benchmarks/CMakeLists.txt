@@ -27,7 +27,7 @@ target_link_libraries(bench_framework
 add_executable(crypto_benchmarks
     bench_main.c
     bench_crypto.c
-    bench_weighted_median.c
+    bench_xxx.c
 )
 
 # Link with benchmark framework and crypto library

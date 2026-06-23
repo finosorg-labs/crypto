@@ -116,7 +116,7 @@ endif()
 
 # crypto module sources
 set(OPTIM_SOURCES
-    crypto-c/weighted_median.c
+    crypto-c/xxx.c
 )
 
 # Create object library
@@ -135,11 +135,11 @@ target_compile_definitions(finkit_crypto PRIVATE FC_STATIC_BUILD)
 
 # Set compile flags for SIMD variants based on detected level
 if(FC_SIMD_LEVEL STREQUAL "AVX512")
-    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
+    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_AVX512_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "AVX2")
-    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
+    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_AVX2_FLAGS}")
 elseif(FC_SIMD_LEVEL STREQUAL "SSE42")
-    set_source_files_properties(crypto-c/weighted_median.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
+    set_source_files_properties(crypto-c/xxx.c PROPERTIES COMPILE_FLAGS "${FC_SSE42_FLAGS}")
 endif()
 
 # Create base static library (without platform)

@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 /* External benchmark functions from sub-modules */
-extern void bench_weighted_median_run(void);
+extern void bench_xxx_run(void);
 
 /* Entry point for crypto benchmarks */
 void bench_crypto_run(void) {
@@ -22,7 +22,7 @@ void bench_crypto_run(void) {
     printf("============================================================\n");
 
     /* Run all sub-module benchmarks */
-    bench_weighted_median_run();
+    bench_xxx_run();
 
     printf("\n");
     printf("============================================================\n");

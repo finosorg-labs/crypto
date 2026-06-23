@@ -32,7 +32,7 @@ package crypto
 #cgo windows LDFLAGS: ${SRCDIR}/modules/sort/build/windows_amd64/libfinkit_sort_static.a -lm
 
 
-#include "weighted_median.h"
+#include "xxx.h"
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -54,7 +54,7 @@ package crypto
 #endif
 
 // crypto sources
-#include "crypto-c/weighted_median.c"
+#include "crypto-c/xxx.c"
 */
 import "C"
 
