@@ -7,13 +7,14 @@ add_executable(crypto_tests
     test_framework.c
     test_main.c
     test_crypto.c
-    test_xxx.c
+    test_index.c
 )
 
 # Link with crypto library
 target_link_libraries(crypto_tests
     PRIVATE
         finkit_crypto_static_base
+        finkit::stats
         finkit::sort
         finkit::ds
         finkit::platform
@@ -31,6 +32,7 @@ target_include_directories(crypto_tests
         ${CMAKE_SOURCE_DIR}/modules/platform/include
         ${CMAKE_SOURCE_DIR}/modules/ds/include
         ${CMAKE_SOURCE_DIR}/modules/sort/include
+        ${CMAKE_SOURCE_DIR}/modules/stats/include
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 

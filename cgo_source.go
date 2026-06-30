@@ -11,6 +11,7 @@ package crypto
 #cgo CFLAGS: -I${SRCDIR}/modules/platform/include
 #cgo CFLAGS: -I${SRCDIR}/modules/ds/include
 #cgo CFLAGS: -I${SRCDIR}/modules/sort/include
+#cgo CFLAGS: -I${SRCDIR}/modules/stats/include
 #cgo CFLAGS: -I${SRCDIR}/modules/platform/third_party/gmp
 #cgo CFLAGS: -I${SRCDIR}/modules/platform/third_party/mpfr/src
 #cgo CFLAGS: -I${SRCDIR}/crypto-c
@@ -31,8 +32,13 @@ package crypto
 #cgo darwin,amd64 LDFLAGS: ${SRCDIR}/modules/sort/build/darwin_x86_64/libfinkit_sort_static.a -lm
 #cgo windows LDFLAGS: ${SRCDIR}/modules/sort/build/windows_amd64/libfinkit_sort_static.a -lm
 
+#cgo linux LDFLAGS: ${SRCDIR}/modules/stats/build/linux_amd64/libfinkit_stats_static.a -lm -lgcov
+#cgo darwin,arm64 LDFLAGS: ${SRCDIR}/modules/stats/build/darwin_arm64/libfinkit_stats_static.a -lm
+#cgo darwin,amd64 LDFLAGS: ${SRCDIR}/modules/stats/build/darwin_x86_64/libfinkit_stats_static.a -lm
+#cgo windows LDFLAGS: ${SRCDIR}/modules/stats/build/windows_amd64/libfinkit_stats_static.a -lm
 
-#include "xxx.h"
+
+#include "index.h"
 
 // Platform sources (dependency)
 #include "simd_detect.c"
@@ -54,7 +60,7 @@ package crypto
 #endif
 
 // crypto sources
-#include "crypto-c/xxx.c"
+#include "crypto-c/index.c"
 */
 import "C"
 
